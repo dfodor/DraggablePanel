@@ -1,4 +1,4 @@
-Draggable Panel [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pedrovgs/draggablepanel/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pedrovgs/draggablepanel)
+Draggable Panel [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pedrovgs/draggablepanel/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pedrovgs/draggablepanel) [![](https://jitpack.io/v/dfodor/DraggablePanel.svg)](https://jitpack.io/#dfodor/DraggablePanel)
 ===============
 
 **DEPRECATED. This project is not maintained anymore.**
