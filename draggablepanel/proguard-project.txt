@@ -18,3 +18,45 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# proguard-support-v7-appcompat
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
+# proguard-support-v7-cardview
+-keep class android.support.v7.widget.RoundRectDrawable { *; }
+-keep class android.support.v7.** { *; }
+-keep class android.support.** { *; }
+
+# Marshmallow removed Notification.setLatestEventInfo()
+-dontwarn android.app.Notification
+
+# Keep the classes/members we need for client functionality.
+-keep @interface android.support.annotation.Keep
+-keep @android.support.annotation.Keep class *
+-keepclasseswithmembers class * {
+  @android.support.annotation.Keep <fields>;
+}
+-keepclasseswithmembers class * {
+  @android.support.annotation.Keep <methods>;
+}
+
+# Needed when building against pre-Marshmallow SDK.
+-dontwarn android.security.NetworkSecurityPolicy
+
+# Needed when building against Marshmallow SDK.
+-dontwarn android.app.Notification
+
+# Needed for isDeviceProtectedStorage when building against a pre-Nougat SDK.
+-dontwarn android.content.Context
+
+# draggable panel
+-keep class com.github.pedrovgs.** { *; }
+
+# This is due to ObjectAnimator using reflection to access get/sets
+-keep class com.github.pedrovgs.ClassThatUsesObjectAnimator { *; }

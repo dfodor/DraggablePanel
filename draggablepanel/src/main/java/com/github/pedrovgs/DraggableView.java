@@ -453,11 +453,6 @@ public class DraggableView extends RelativeLayout {
 	 * Override method to configure the dragged view and secondView layout properly.
 	 */
 	@Override protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		Log.e("drview",
-				"onLayout " + changed + " | " + left + " | " + top + " | " + right + " | " + bottom);
-		Log.e("drview",
-				"view size " + dragView.getWidth() + " | " + dragView.getHeight() + " + screen width "
-						+ getWidth());
 		if (isInEditMode()) {
 			super.onLayout(changed, left, top, right, bottom);
 		} else {
@@ -813,8 +808,6 @@ public class DraggableView extends RelativeLayout {
 	private boolean smoothSlideTo(float slideOffset) {
 		final int topBound = getPaddingTop();
 		int x = (int) (slideOffset * (getWidth() - transformer.getMinWidthPlusMarginRight()));
-		Log.e("drview",
-				"minimise " + x + " + " + transformer.getMinWidthPlusMarginRight() + " = " + getWidth());
 		int y = (int) (topBound + slideOffset * getVerticalDragRange());
 		if (viewDragHelper.smoothSlideViewTo(dragView, 0, y)) {
 			ViewCompat.postInvalidateOnAnimation(this);
