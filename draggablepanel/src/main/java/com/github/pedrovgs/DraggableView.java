@@ -430,8 +430,8 @@ public class DraggableView extends RelativeLayout {
 	}
 
 	public boolean shouldMaximizeOnClick(MotionEvent ev, float deltaX, boolean isDragViewHit) {
-		return (Math.abs(deltaX) < MIN_SLIDING_DISTANCE_ON_CLICK)
-				&& ev.getAction() != MotionEvent.ACTION_MOVE && isDragViewHit;
+		return (Math.abs(deltaX) < MIN_SLIDING_DISTANCE_ON_CLICK) && ev.getAction() != MotionEvent.ACTION_MOVE
+				&& isDragViewHit;
 	}
 
 	/**
@@ -445,8 +445,8 @@ public class DraggableView extends RelativeLayout {
 	 * @return cloned motion event
 	 */
 	private MotionEvent cloneMotionEventWithAction(MotionEvent event, int action) {
-		return MotionEvent.obtain(event.getDownTime(), event.getEventTime(), action, event.getX(),
-				event.getY(), event.getMetaState());
+		return MotionEvent.obtain(event.getDownTime(), event.getEventTime(), action, event.getX(), event.getY(),
+				event.getMetaState());
 	}
 
 	/**
@@ -565,10 +565,8 @@ public class DraggableView extends RelativeLayout {
 	}
 
 	private void mapGUI(TypedArray attributes) {
-		int dragViewId =
-				attributes.getResourceId(R.styleable.draggable_view_top_view_id, R.id.drag_view);
-		int secondViewId =
-				attributes.getResourceId(R.styleable.draggable_view_bottom_view_id, R.id.second_view);
+		int dragViewId = attributes.getResourceId(R.styleable.draggable_view_top_view_id, R.id.drag_view);
+		int secondViewId = attributes.getResourceId(R.styleable.draggable_view_bottom_view_id, R.id.second_view);
 		dragView = findViewById(dragViewId);
 		secondView = findViewById(secondViewId);
 	}
@@ -732,8 +730,8 @@ public class DraggableView extends RelativeLayout {
 		this.getLocationOnScreen(parentLocation);
 		int screenX = parentLocation[0] + x;
 		int screenY = parentLocation[1] + y;
-		return screenX >= viewLocation[0] && screenX < viewLocation[0] + view.getWidth()
-				&& screenY >= viewLocation[1] && screenY < viewLocation[1] + view.getHeight();
+		return screenX >= viewLocation[0] && screenX < viewLocation[0] + view.getWidth() && screenY >= viewLocation[1]
+				&& screenY < viewLocation[1] + view.getHeight();
 	}
 
 	/**
@@ -750,33 +748,26 @@ public class DraggableView extends RelativeLayout {
 	 * Initialize the viewDragHelper.
 	 */
 	private void initializeViewDragHelper() {
-		viewDragHelper =
-				ViewDragHelper.create(this, SENSITIVITY, new DraggableViewCallback(this, dragView));
+		viewDragHelper = ViewDragHelper.create(this, SENSITIVITY, new DraggableViewCallback(this, dragView));
 	}
 
 	/**
 	 * Initialize Transformer with a scalable or change width/height implementation.
 	 */
 	private void initializeTransformer(TypedArray attributes) {
-		topViewResize =
-				attributes.getBoolean(R.styleable.draggable_view_top_view_resize, DEFAULT_TOP_VIEW_RESIZE);
+		topViewResize = attributes.getBoolean(R.styleable.draggable_view_top_view_resize, DEFAULT_TOP_VIEW_RESIZE);
 		TransformerFactory transformerFactory = new TransformerFactory();
 		transformer = transformerFactory.getTransformer(topViewResize, dragView, this);
 		transformer.setViewHeight(
-				attributes.getDimensionPixelSize(R.styleable.draggable_view_top_view_height,
-						DEFAULT_TOP_VIEW_HEIGHT));
+				attributes.getDimensionPixelSize(R.styleable.draggable_view_top_view_height, DEFAULT_TOP_VIEW_HEIGHT));
 		transformer.setXScaleFactor(
-				attributes.getFloat(R.styleable.draggable_view_top_view_x_scale_factor,
-						DEFAULT_SCALE_FACTOR));
+				attributes.getFloat(R.styleable.draggable_view_top_view_x_scale_factor, DEFAULT_SCALE_FACTOR));
 		transformer.setYScaleFactor(
-				attributes.getFloat(R.styleable.draggable_view_top_view_y_scale_factor,
-						DEFAULT_SCALE_FACTOR));
-		transformer.setMarginRight(
-				attributes.getDimensionPixelSize(R.styleable.draggable_view_top_view_margin_right,
-						DEFAULT_TOP_VIEW_MARGIN));
-		transformer.setMarginBottom(
-				attributes.getDimensionPixelSize(R.styleable.draggable_view_top_view_margin_bottom,
-						DEFAULT_TOP_VIEW_MARGIN));
+				attributes.getFloat(R.styleable.draggable_view_top_view_y_scale_factor, DEFAULT_SCALE_FACTOR));
+		transformer.setMarginRight(attributes.getDimensionPixelSize(R.styleable.draggable_view_top_view_margin_right,
+				DEFAULT_TOP_VIEW_MARGIN));
+		transformer.setMarginBottom(attributes.getDimensionPixelSize(R.styleable.draggable_view_top_view_margin_bottom,
+				DEFAULT_TOP_VIEW_MARGIN));
 	}
 
 	/**
@@ -789,12 +780,10 @@ public class DraggableView extends RelativeLayout {
 		this.enableHorizontalAlphaEffect =
 				attributes.getBoolean(R.styleable.draggable_view_enable_minimized_horizontal_alpha_effect,
 						DEFAULT_ENABLE_HORIZONTAL_ALPHA_EFFECT);
-		this.enableClickToMaximize =
-				attributes.getBoolean(R.styleable.draggable_view_enable_click_to_maximize_view,
-						DEFAULT_ENABLE_CLICK_TO_MAXIMIZE);
-		this.enableClickToMinimize =
-				attributes.getBoolean(R.styleable.draggable_view_enable_click_to_minimize_view,
-						DEFAULT_ENABLE_CLICK_TO_MINIMIZE);
+		this.enableClickToMaximize = attributes.getBoolean(R.styleable.draggable_view_enable_click_to_maximize_view,
+				DEFAULT_ENABLE_CLICK_TO_MAXIMIZE);
+		this.enableClickToMinimize = attributes.getBoolean(R.styleable.draggable_view_enable_click_to_minimize_view,
+				DEFAULT_ENABLE_CLICK_TO_MINIMIZE);
 		this.attributes = attributes;
 	}
 
@@ -895,6 +884,16 @@ public class DraggableView extends RelativeLayout {
 		if (listener != null) {
 			listener.onClosedToLeft();
 		}
+	}
+
+	void onDrag(float viewYPosition, int parentHeight, int viewHeight) {
+		if (listener != null) {
+			listener.onDrag(viewYPosition, parentHeight, viewHeight);
+		}
+	}
+
+	float getViewYPosition() {
+		return transformer.getViewYPosition();
 	}
 
 	public int getDraggedViewHeightPlusMarginTop() {

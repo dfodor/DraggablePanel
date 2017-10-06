@@ -140,6 +140,11 @@ public abstract class Transformer {
     return viewYPosition < (parentHeight * 0.5);
   }
 
+  public float getViewYPosition(){
+  	//return ViewHelper.getY(view) + (view.getHeight() * 0.5f);
+  	return ViewHelper.getY(view) + (view.getHeight());
+  }
+
   public abstract boolean isViewAtRight();
 
   public abstract boolean isViewAtBottom();
