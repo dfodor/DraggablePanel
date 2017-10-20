@@ -15,6 +15,7 @@
  */
 package com.github.pedrovgs;
 
+import android.content.res.Configuration;
 import android.support.v4.widget.ViewDragHelper;
 import android.view.View;
 
@@ -127,14 +128,21 @@ class DraggableViewCallback extends ViewDragHelper.Callback {
 	 */
 	@Override public int clampViewPositionVertical(View child, int top, int dy) {
 		int newTop = draggableView.getHeight() - draggableView.getDraggedViewHeightPlusMarginTop();
-		if (draggableView.isMinimized() && Math.abs(dy) >= MINIMUM_DY_FOR_VERTICAL_DRAG || (!draggableView.isMinimized()
-				&& !draggableView.isDragViewAtBottom())) {
+		/**
+		 * Disable landscape drag to maximize.
+		 */
+		if (draggableView.getContext().getResources().getConfiguration().orientation
+				== Configuration.ORIENTATION_PORTRAIT) {
 
-			final int topBound = draggableView.getPaddingTop();
-			final int bottomBound = draggableView.getHeight() - draggableView.getDraggedViewHeightPlusMarginTop()
-					- draggedView.getPaddingBottom();
+			if (draggableView.isMinimized() && Math.abs(dy) >= MINIMUM_DY_FOR_VERTICAL_DRAG || (
+					!draggableView.isMinimized() && !draggableView.isDragViewAtBottom())) {
 
-			newTop = Math.min(Math.max(top, topBound), bottomBound);
+				final int topBound = draggableView.getPaddingTop();
+				final int bottomBound = draggableView.getHeight() - draggableView.getDraggedViewHeightPlusMarginTop()
+						- draggedView.getPaddingBottom();
+
+				newTop = Math.min(Math.max(top, topBound), bottomBound);
+			}
 		}
 		return newTop;
 	}

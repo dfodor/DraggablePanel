@@ -16,6 +16,7 @@
 package com.github.pedrovgs;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
@@ -269,7 +270,9 @@ public class DraggableView extends RelativeLayout {
 	 * Maximize the custom view applying an animation to return the view to the initial position.
 	 */
 	public void maximize() {
-		smoothSlideTo(SLIDE_TOP);
+		if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			smoothSlideTo(SLIDE_TOP);
+		}
 		notifyMaximizeToListener();
 	}
 
