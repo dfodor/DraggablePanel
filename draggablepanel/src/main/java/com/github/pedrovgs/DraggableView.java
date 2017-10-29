@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
@@ -43,6 +44,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 //source https://github.com/frakc/DraggablePanel/blob/develop/draggablepanel/src/main/java/com/github/pedrovgs/DraggableView.java
 public class DraggableView extends RelativeLayout {
+
+	private static final long ANIMATION_DELAY = 5;
 
 	private enum DraggableViewState {
 		MAXIMISED, MINIMISED, CLOSED_TO_LEFT, CLOSED_TO_RIGHT
@@ -88,6 +91,8 @@ public class DraggableView extends RelativeLayout {
 	private int top = 0;
 	private int right = 0;
 	private int bottom = 0;
+
+	private long lastPostInvalidateOnAnimation = 0;
 
 	public DraggableView(Context context) {
 		super(context);
@@ -262,7 +267,19 @@ public class DraggableView extends RelativeLayout {
 	 */
 	@Override public void computeScroll() {
 		if (!isInEditMode() && viewDragHelper.continueSettling(true)) {
+			lastPostInvalidateOnAnimation = SystemClock.elapsedRealtime();
 			ViewCompat.postInvalidateOnAnimation(this);
+		}
+
+		/**
+		 * Prevents draggable view from stuck in middle  of the screen.
+		 */
+		if (SystemClock.elapsedRealtime() - lastPostInvalidateOnAnimation >= ANIMATION_DELAY) {
+			if (!isMaximized() && isDragViewAboveTheMiddle()) {
+				maximize();
+			} else if (!isMinimized() && !isDragViewAboveTheMiddle()) {
+				minimize();
+			}
 		}
 	}
 
@@ -935,7 +952,6 @@ public class DraggableView extends RelativeLayout {
 				smoothSlideTo(SLIDE_BOTTOM);
 				break;
 		}
-		Log.e("drview", "onRestoreState " + mState.toString());
 	}
 
 	/**
