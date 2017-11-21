@@ -28,7 +28,6 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -93,6 +92,7 @@ public class DraggableView extends RelativeLayout {
 	private int bottom = 0;
 
 	private long lastPostInvalidateOnAnimation = 0;
+	private boolean blockDrag;
 
 	public DraggableView(Context context) {
 		super(context);
@@ -370,6 +370,14 @@ public class DraggableView extends RelativeLayout {
 		return isClosedAtLeft() || isClosedAtRight();
 	}
 
+	public void setBlockDrag(boolean blockDrag) {
+		this.blockDrag = blockDrag;
+	}
+
+	public boolean isBlockDrag() {
+		return blockDrag;
+	}
+
 	/**
 	 * Override method to intercept only touch events over the drag view and to cancel the drag when
 	 * the action associated to the MotionEvent is equals to ACTION_CANCEL or ACTION_UP.
@@ -407,6 +415,11 @@ public class DraggableView extends RelativeLayout {
 	 * @return true if the touch event is realized over the drag or second view.
 	 */
 	@Override public boolean onTouchEvent(MotionEvent ev) {
+
+		if (isBlockDrag() && isMaximized()) {
+			return dragView.dispatchTouchEvent(ev);
+		}
+
 		int actionMasked = MotionEventCompat.getActionMasked(ev);
 		if ((actionMasked & MotionEventCompat.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
 			activePointerId = MotionEventCompat.getPointerId(ev, actionMasked);
